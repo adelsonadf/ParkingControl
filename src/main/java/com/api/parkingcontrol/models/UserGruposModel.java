@@ -16,26 +16,22 @@ public class UserGruposModel implements Serializable {
 
 
 
-
-    @OneToMany(mappedBy = "userGruposModel")
-    private List<UserModel> userModel;
-
-    public List<UserModel> getUserModel() {
-        return userModel;
-    }
-
-    public void setUserModel(List<UserModel> userModel) {
-        this.userModel = userModel;
-    }
+    @OneToOne
+    @JoinColumn(name = "userModel_id")
+    private UserModel userModel;
 
 
 
-    public Long getId() {
+    public Long getUserGrupoId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setUserGrupoId(Long id) {
     }
+    public String getUserGrupoNome() { return userGrupoNome; }
 
+
+    public void setUserGrupoNome(String userGrupoNome) {
+    }
 
 }

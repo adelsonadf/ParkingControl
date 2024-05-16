@@ -2,6 +2,7 @@ package com.api.parkingcontrol.controllers;
 
 import com.api.parkingcontrol.dtos.UserDto;
 import com.api.parkingcontrol.models.UserModel;
+import com.api.parkingcontrol.repositories.UserRepository;
 import com.api.parkingcontrol.services.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/Usuario")
+@RequestMapping("/User")
 public class UserController {
 
     final UserService userService;
@@ -27,25 +28,22 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    @PostMapping
+     @PostMapping
     public ResponseEntity<Object> saveUsuario(@RequestBody @Valid UserDto userDto){
         if(userService.existsByUserEmail(userDto.getUserEmail())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: email  is already in use!");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflito: email ja se encontra em uso !");
         }
-        if(userService.existsByuserName(userDto.getUserName())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Nome do usuário is already in use!");
+        if(userService.existsByUserName(userDto.getUserName())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflito: Nome do usuário em uso !");
         }
         var userModel = new UserModel();
         BeanUtils.copyProperties(userDto, userModel);
         userModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-
-
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userModel));
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserModel>> getAllUser(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+    public ResponseEntity<Page<UserModel>> getAllUser(@PageableDefault(page = 0, size = 100, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
     }
 
@@ -62,7 +60,7 @@ public class UserController {
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") Long id){
         Optional<UserModel> userModelOptional = userService.findById(id);
         if (!userModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("usuário not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado !");
         }
         userService.delete(userModelOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Usuário deleted successfully.");
@@ -75,10 +73,12 @@ public class UserController {
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário  não localizado !.");
         }
-        var userModel = new UserModel();
+        /*var userModel = new UserModel(); */
+        var userModel = userModelOptional.get();
+
         BeanUtils.copyProperties(userDto, userModel);
-        userModel.setId(userModelOptional.get().getId());
-        userModel.setRegistrationDate(userModelOptional.get().getRegistrationDate());
+        /*userModel.setId(userModelOptional.get().getId());
+        userModel.setRegistrationDate(userModelOptional.get().getRegistrationDate()); */
         return ResponseEntity.status(HttpStatus.OK).body(userService.save(userModel));
     }
 

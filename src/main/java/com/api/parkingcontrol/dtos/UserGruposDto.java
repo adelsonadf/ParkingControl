@@ -10,7 +10,7 @@ public class UserGruposDto {
         return userGrupoNome;
     }
 
-    public void setUserGrupoNome(String userName) {
+    public void setUserGrupoNome(String userGrupoNome) {
         this.userGrupoNome = userGrupoNome;
     }
 

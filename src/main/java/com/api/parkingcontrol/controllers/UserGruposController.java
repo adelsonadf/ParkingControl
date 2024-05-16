@@ -1,6 +1,7 @@
 package com.api.parkingcontrol.controllers;
 import com.api.parkingcontrol.dtos.UserGruposDto;
 import com.api.parkingcontrol.models.UserGruposModel;
+import com.api.parkingcontrol.models.UserModel;
 import com.api.parkingcontrol.services.UserGruposService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/Usuario-Grupo")
+@RequestMapping("/User_Grupo")
 public class UserGruposController {
 
     final UserGruposService userGruposService;
@@ -42,7 +43,7 @@ public class UserGruposController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneParkingSpot(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> getUserGrupo(@PathVariable(value = "id") Long id){
         Optional<UserGruposModel> gruposModelOptional = userGruposService.findById(id);
         if (!gruposModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("grupo not found.");
@@ -50,8 +51,9 @@ public class UserGruposController {
         return ResponseEntity.status(HttpStatus.OK).body(gruposModelOptional.get());
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUserGrupos(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> deleteUserGrupos(@PathVariable(value = "id") Long id){
         Optional<UserGruposModel> gruposModelOptional = userGruposService.findById(id);
         if (!gruposModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("grupo not found.");
@@ -61,7 +63,7 @@ public class UserGruposController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateUserGrupos(@PathVariable(value = "id") UUID id,
+    public ResponseEntity<Object> updateUserGrupos(@PathVariable(value = "id") Long id,
                                                     @RequestBody @Valid UserGruposDto userGruposDto){
         Optional<UserGruposModel> userGruposModelOptional = userGruposService.findById(id);
         if (!userGruposModelOptional.isPresent()) {
@@ -69,7 +71,7 @@ public class UserGruposController {
         }
         var userGruposModel = new UserGruposModel();
         BeanUtils.copyProperties(userGruposDto, userGruposModel);
-        userGruposModel.setId(userGruposModelOptional.get().getId());
+        userGruposModel.setUserGrupoId(userGruposModelOptional.get().getUserGrupoId());
         return ResponseEntity.status(HttpStatus.OK).body(userGruposService.save(userGruposModel));
     }
 

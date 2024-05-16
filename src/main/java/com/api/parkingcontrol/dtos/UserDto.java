@@ -44,7 +44,7 @@ public class UserDto {
         this.ultimoAcessoDate = ultimoAcessoDate;
     }
 
-    @NotNull
+    //@NotNull
     @DateTimeFormat(pattern = "dd/MM/yyyy")
 
     private  LocalDate ultimoAcessoDate;

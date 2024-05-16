@@ -37,7 +37,7 @@ public class UserGruposService {
         return userGruposRepository.findAll(pageable);
     }
 
-    public Optional<UserGruposModel> findById(UUID id) {
+    public Optional<UserGruposModel> findById(long id) {
         return  userGruposRepository.findById(id);
     }
 

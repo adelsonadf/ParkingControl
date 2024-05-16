@@ -32,16 +32,14 @@ public class UserModel implements Serializable {
     @Column(nullable = false, length = 50)
     private String userEmail;
 
-    //@Column(nullable = false)
-    //private int userGrupo;
+    @Column(nullable = false)
+    private int userGrupo;
 
     @Column()
     private int userStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "userGrupo") // nome da coluna na tabela Usuarios que referencia a Grupos
+    @OneToOne(mappedBy = "userModel", cascade = CascadeType.ALL)
     private UserGruposModel userGruposModel;
-
     public Long getId() {
         return id;
     }
@@ -110,13 +108,13 @@ public class UserModel implements Serializable {
         this.userEmail = userEmail;
     }
 
-    //public int getUserGrupo() {
-     //   return userGrupo;
-   // }
+    public int getUserGrupo() {
+       return userGrupo;
+    }
 
-    //public void setUserGrupo(int userGrupo) {
-    //    this.userGrupo = userGrupo;
-    //}
+   public void setUserGrupo(int userGrupo) {
+       this.userGrupo = userGrupo;
+   }
 
     public int getUserStatus() {
         return userStatus;
