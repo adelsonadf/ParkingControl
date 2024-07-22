@@ -1,10 +1,13 @@
 package com.api.parkingcontrol.models;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
 @Table(name = "TB_USUARIOS")
@@ -57,7 +60,7 @@ public class UserModel implements Serializable {
     }
 
     public String getUserSenha() {
-        return userSenha;
+       return userSenha;
     }
 
     public void setUserSenha(String userSenha) {
@@ -131,5 +134,6 @@ public class UserModel implements Serializable {
     public void setUserGruposModel(UserGruposModel userGruposModel) {
         this.userGruposModel = userGruposModel;
     }
+
 }
 

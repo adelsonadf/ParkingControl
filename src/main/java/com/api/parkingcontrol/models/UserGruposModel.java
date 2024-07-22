@@ -22,16 +22,18 @@ public class UserGruposModel implements Serializable {
 
 
 
-    public Long getUserGrupoId() {
+    public Long getId() {
         return id;
     }
-
-    public void setUserGrupoId(Long id) {
+    public void setId(Long id) {
     }
-    public String getUserGrupoNome() { return userGrupoNome; }
 
+    public String getUserGrupoNome() {
+        return userGrupoNome;
+    }
 
     public void setUserGrupoNome(String userGrupoNome) {
+        this.userGrupoNome = userGrupoNome;
     }
 
 }

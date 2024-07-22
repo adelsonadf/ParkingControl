@@ -1,4 +1,5 @@
 package com.api.parkingcontrol.controllers;
+import com.api.parkingcontrol.dtos.UserDto;
 import com.api.parkingcontrol.dtos.UserGruposDto;
 import com.api.parkingcontrol.models.UserGruposModel;
 import com.api.parkingcontrol.models.UserModel;
@@ -10,15 +11,21 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
 
-@RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin("*")
+
+
 @RequestMapping("/User_Grupo")
+@RestController
 public class UserGruposController {
 
     final UserGruposService userGruposService;
@@ -37,11 +44,13 @@ public class UserGruposController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userGruposService.save(userGruposModel));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<Page<UserGruposModel>> getAllUserGrupos(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(userGruposService.findAll(pageable));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUserGrupo(@PathVariable(value = "id") Long id){
         Optional<UserGruposModel> gruposModelOptional = userGruposService.findById(id);
@@ -54,14 +63,19 @@ public class UserGruposController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUserGrupos(@PathVariable(value = "id") Long id){
-        Optional<UserGruposModel> gruposModelOptional = userGruposService.findById(id);
-        if (!gruposModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("grupo not found.");
+        Optional<UserGruposModel> userGruposModelOptional = userGruposService.findById(id);
+        if (!userGruposModelOptional.isPresent()) {
+            System.out.println("PASSEI AQUI TAMBÉM");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Grupo não localizado !");
         }
-        userGruposService.delete(gruposModelOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Grupo deleted successfully.");
+        userGruposService.delete(userGruposModelOptional.get());
+        System.out.println("PASSEIAQUI");
+        return ResponseEntity.status(HttpStatus.OK).body("Grupo excluido com sucesso !");
     }
 
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateUserGrupos(@PathVariable(value = "id") Long id,
                                                     @RequestBody @Valid UserGruposDto userGruposDto){
@@ -69,11 +83,13 @@ public class UserGruposController {
         if (!userGruposModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Grupo not found.");
         }
-        var userGruposModel = new UserGruposModel();
+        /*var userGruposModel =  new UserGruposModel(); */
+        var userGruposModel =  userGruposModelOptional.get();
         BeanUtils.copyProperties(userGruposDto, userGruposModel);
-        userGruposModel.setUserGrupoId(userGruposModelOptional.get().getUserGrupoId());
+        /*userGruposModel.setUserGrupoId(userGruposModelOptional.get().getUserGrupoId()); */
         return ResponseEntity.status(HttpStatus.OK).body(userGruposService.save(userGruposModel));
     }
+
 
 
 }

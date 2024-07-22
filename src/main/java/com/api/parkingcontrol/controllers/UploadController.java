@@ -1,4 +1,5 @@
 package com.api.parkingcontrol.controllers;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,6 @@ public class UploadController {
     public String index() {
         return "upload";
     }
-
     @PostMapping("/upload") // //new annotation since 4.3
     public String singleFileUpload(@RequestParam(value = "file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {

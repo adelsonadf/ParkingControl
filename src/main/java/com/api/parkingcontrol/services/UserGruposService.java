@@ -28,8 +28,8 @@ public class UserGruposService {
 
 
 
-    public boolean existsByuserGrupoNome(String userGrupoNome) {
-        return userGruposRepository.existsByuserGrupoNome(userGrupoNome);
+    public boolean existsByuserGrupoNome(String UserGrupoNome) {
+        return userGruposRepository.existsByUserGrupoNome(UserGrupoNome);
     }
 
 
